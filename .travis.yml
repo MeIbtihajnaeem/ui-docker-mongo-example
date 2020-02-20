@@ -1,5 +1,9 @@
 language: java
 
+# explicit distribution specification
+# to run xvfb manually in before_script
+dist: trusty
+
 jdk: openjdk8
 
 env: DISPLAY=:99.0
