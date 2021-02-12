@@ -3,6 +3,7 @@ package com.examples.school.controller;
 import static org.mockito.Mockito.*;
 import static java.util.Arrays.asList;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,6 +14,7 @@ import com.examples.school.repository.StudentRepository;
 import com.examples.school.repository.mongo.StudentMongoRepository;
 import com.examples.school.view.StudentView;
 import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 
 /**
  * Communicates with a MongoDB server on localhost; start MongoDB with Docker with
@@ -33,15 +35,27 @@ public class SchoolControllerIT {
 
 	private SchoolController schoolController;
 
+	private AutoCloseable closeable;
+
+	private static int mongoPort =
+		Integer.parseInt(System.getProperty("mongo.port", "27017"));
+
 	@Before
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-		studentRepository = new StudentMongoRepository(new MongoClient("localhost"));
+		closeable = MockitoAnnotations.openMocks(this);
+		studentRepository = new StudentMongoRepository(
+			new MongoClient(
+				new ServerAddress("localhost", mongoPort)));
 		// explicit empty the database through the repository
 		for (Student student : studentRepository.findAll()) {
 			studentRepository.delete(student.getId());
 		}
 		schoolController = new SchoolController(studentView, studentRepository);
+	}
+
+	@After
+	public void releaseMocks() throws Exception {
+		closeable.close();
 	}
 
 	@Test
