@@ -10,7 +10,7 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 
 import com.examples.school.controller.SchoolController;
 import com.examples.school.model.Student;
@@ -20,11 +20,9 @@ import com.mongodb.ServerAddress;
 
 @RunWith(GUITestRunner.class)
 public class ModelViewControllerIT extends AssertJSwingJUnitTestCase {
-	@SuppressWarnings("rawtypes")
 	@ClassRule
-	public static final GenericContainer mongo =
-		new GenericContainer("mongo:4.4.3") 
-			.withExposedPorts(27017);
+	public static final MongoDBContainer mongo =
+		new MongoDBContainer("mongo:4.4.3");
 
 	private MongoClient mongoClient;
 
@@ -36,8 +34,8 @@ public class ModelViewControllerIT extends AssertJSwingJUnitTestCase {
 	protected void onSetUp() {
 		mongoClient = new MongoClient(
 			new ServerAddress(
-					mongo.getContainerIpAddress(),
-					mongo.getMappedPort(27017)));
+				mongo.getContainerIpAddress(),
+				mongo.getFirstMappedPort()));
 		studentRepository = new StudentMongoRepository(mongoClient);
 		// explicit empty the database through the repository
 		for (Student student : studentRepository.findAll()) {
