@@ -1,5 +1,5 @@
 # ui-docker-mongo-example
-A simple example of a Maven project built on Travis CI with UI, UI Unit and Integration Tests with AssertJ Swing, and MongoDB
+A simple example of a Maven project built on GitHub Actions (on Linux, macOS and Windows) with UI, UI Unit and Integration Tests with AssertJ Swing, and MongoDB
 
 An example of Chapter _UI tests_ of the book
 
