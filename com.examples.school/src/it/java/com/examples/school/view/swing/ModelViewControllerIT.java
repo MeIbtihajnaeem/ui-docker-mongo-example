@@ -34,7 +34,7 @@ public class ModelViewControllerIT extends AssertJSwingJUnitTestCase {
 	protected void onSetUp() {
 		mongoClient = new MongoClient(
 			new ServerAddress(
-				mongo.getContainerIpAddress(),
+				mongo.getHost(),
 				mongo.getFirstMappedPort()));
 		studentRepository = new StudentMongoRepository(mongoClient);
 		// explicit empty the database through the repository
